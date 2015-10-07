@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Getting Started with Three.js</title>
+		<style>
+			#container {
+				background: #000;
+                /* Specify the canvas size*/
+                height: 600px;
+                width: 800px;
+			}
+		</style>
+	</head>
+
+	<body>
+	<div id="container"></div>
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+
+	<!--Importants all of the awesomeness of Three.js-->
+  <script type="text/javascript" src="threejs/build/three.min.js"></script>
+
+	<!-- 1. Import the collada loader script -->
+	<script type="text/javascript" src="threejs/examples/js/loaders/ColladaLoader.js"></script>
+	<script type="text/javascript">
+	/**
+	 * 2. Create a variable to hold the model
+	 */
+	 var model;
+
+	/**
+	 * 3. Load the model using the THREE.ColladaLoader
+	 */
+	 var loader = new THREE.ColladaLoader();
+	 loader.load('second.dae', function(result){
+		 model = result.scene;
+		 init();
+	 });
+	// init();
+	/**
+	 * 4. Call init once the model is loaded
+	 */
+
+	function init() {
+
+		/************** Set up the scene **********************/
+		// Set the size of the container where we're going to be drawing things
+		var WIDTH = 800;
+	  var HEIGHT = 600;
+
+    // Instatiate the scene
+    var scene = new THREE.Scene();
+
+	// Get a place on the webpage to put the scene
+    var $container = $('#container');
+
+	// Set some camera attributes
+    var CAMERA_ANGLE = 45;
+    var ASPECT_RATIO = WIDTH / HEIGHT;
+    var NEAR_PLANE = 0.1;
+    var FAR_PLANE = 10000;
+
+	// Set-up a Camera
+    var camera = new THREE.PerspectiveCamera(CAMERA_ANGLE,
+        ASPECT_RATIO,
+        NEAR_PLANE, FAR_PLANE
+    );
+
+	// Put the camera somewhere useful
+    camera.position.z = 100;
+
+    // Create a WebGL Renderer
+    var renderer = new THREE.WebGLRenderer();
+
+	// Tell the renderer how many pixels it has to work with
+    renderer.setSize(WIDTH, HEIGHT);
+
+	// Link the renderer to the webpage
+    $container.append(renderer.domElement);
+
+    /************ Now let's draw something! **********************/
+	// (3) Create a material for our object
+  //   var sphereMaterial = new THREE.MeshPhongMaterial({
+  //   color: 0xCC0000
+  //   });
+	//
+	// // Define how finely we want to divide a sphere mesh
+  //   var radius = 50, widthSegs = 40, heightSegs = 40;
+	//
+  //   var sphere = new THREE.Mesh(
+  //       new THREE.SphereGeometry(radius, widthSegs, heightSegs),
+  //       sphereMaterial);
+	//
+	// scene.add(sphere);
+
+
+	/**
+	 * 5. Add the loaded model to the scene
+	 */
+	scene.add(model);
+
+	// And the camera
+  scene.add(camera);
+
+	// Create a point light
+  var pointLight = new THREE.PointLight(0xFFFFFF);
+
+	// Put it somewhere
+  pointLight.position.x = 10;
+  pointLight.position.y = 50;
+  pointLight.position.z = 130;
+
+	// Add the light to the scene
+  scene.add(pointLight);
+
+	// Draw!
+  var clock = new THREE.Clock;
+	var time;
+  function render() {
+    renderer.render(scene, camera);
+
+		time = clock.getDelta();
+
+		/**
+		 * 6. Rotate the model?
+		*/
+		model.rotation.x += time;
+    requestAnimationFrame(render);
+  }
+
+    render();
+
+	}
+
+	</script>
+</html>
