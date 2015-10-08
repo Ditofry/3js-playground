@@ -59,7 +59,7 @@
 	  var $container = $('#container');
 
 		// Set some camera attributes
-	  var CAMERA_ANGLE = 45;
+	  var CAMERA_ANGLE = 90;
 	  var ASPECT_RATIO = WIDTH / HEIGHT;
 	  var NEAR_PLANE = 0.1;
 	  var FAR_PLANE = 10000;
@@ -109,18 +109,21 @@
 		// Draw!
 	  var clock = new THREE.Clock;
 		var time;
+		// Temporary position correction
+		model.rotation.x += .9;
+		model.rotation.y -= 1.6;
 	  function render() {
-	      renderer.render(scene, camera);
+      renderer.render(scene, camera);
 
-				time = clock.getDelta();
+			time = clock.getDelta();
 
-				/**
-				 * 6. Rotate the model?
-				*/
-				model.rotation.y -= time;
-				// model.rotation.x -= time;
+			/**
+			 * 6. Rotate the model?
+			*/
+			model.rotation.y -= time;
+			// model.rotation.x -= time;
 
-	  		requestAnimationFrame(render);
+  		requestAnimationFrame(render);
 	  }
 	  render();
 	}
