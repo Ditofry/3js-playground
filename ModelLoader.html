@@ -30,114 +30,99 @@
 	/**
 	 * 2. Create a variable to hold the model
 	 */
-	 var model;
+	var model;
 
 	/**
 	 * 3. Load the model using the THREE.ColladaLoader
 	 */
-	 var loader = new THREE.ColladaLoader();
-	 loader.load('second.dae', function(result) {
+	var loader = new THREE.ColladaLoader();
+	loader.load('stan.dae', function(result) {
 		model = result.scene;
 
 		/**
-		 * 4. Call init once the model is loaded
-		 */
+		* 4. Call init once the model is loaded
+		*/
 		init();
-	 });
+	});
 
 	function init() {
 
-	/************** Set up the scene **********************/
-	// Set the size of the container where we're going to be drawing things
-	var WIDTH = 800;
-    var HEIGHT = 600;
+		/************** Set up the scene **********************/
+		// Set the size of the container where we're going to be drawing things
+		var WIDTH = 800;
+	  var HEIGHT = 600;
 
-    // Instatiate the scene
-    var scene = new THREE.Scene();
+	  // Instatiate the scene
+	  var scene = new THREE.Scene();
 
-	// Get a place on the webpage to put the scene
-    var $container = $('#container');
+		// Get a place on the webpage to put the scene
+	  var $container = $('#container');
 
-	// Set some camera attributes
-    var CAMERA_ANGLE = 45;
-    var ASPECT_RATIO = WIDTH / HEIGHT;
-    var NEAR_PLANE = 0.1;
-    var FAR_PLANE = 10000;
+		// Set some camera attributes
+	  var CAMERA_ANGLE = 45;
+	  var ASPECT_RATIO = WIDTH / HEIGHT;
+	  var NEAR_PLANE = 0.1;
+	  var FAR_PLANE = 10000;
 
-	// Set-up a Camera
-    var camera = new THREE.PerspectiveCamera(CAMERA_ANGLE,
-        ASPECT_RATIO,
-        NEAR_PLANE, FAR_PLANE
-        );
+		// Set-up a Camera
+	  var camera = new THREE.PerspectiveCamera(
+			CAMERA_ANGLE,
+	    ASPECT_RATIO,
+	    NEAR_PLANE,
+			FAR_PLANE
+	  );
 
-	// Put the camera somewhere useful
-    camera.position.z = 5;
+		// Put the camera somewhere useful
+	  camera.position.z = 5;
 
-    // Create a WebGL Renderer
-    var renderer = new THREE.WebGLRenderer();
+	  // Create a WebGL Renderer
+	  var renderer = new THREE.WebGLRenderer();
 
-	// Tell the renderer how many pixels it has to work with
-    renderer.setSize(WIDTH, HEIGHT);
+		// Tell the renderer how many pixels it has to work with
+	  renderer.setSize(WIDTH, HEIGHT);
 
-	// Link the renderer to the webpage
-    $container.append(renderer.domElement);
+		// Link the renderer to the webpage
+	  $container.append(renderer.domElement);
 
-    /************ Now let's draw something! **********************/
-	// (3) Create a material for our object
-    var sphereMaterial = new THREE.MeshPhongMaterial({
-    color: 0xCC0000
-    });
-
-	// Define how finely we want to divide a sphere mesh
-    var radius = 50, widthSegs = 40, heightSegs = 40;
-
-    var sphere = new THREE.Mesh(
-        new THREE.SphereGeometry(radius, widthSegs, heightSegs),
-        sphereMaterial);
-
-	//scene.add(sphere);
-
-
-	/**
-	 * 5. Add the loaded model to the scene
-	 */
-	 scene.add(model);
-
-
-	// And the camera
-    scene.add(camera);
-
-	// Create a point light
-    var pointLight = new THREE.PointLight(0xFFFFFF);
-
-	// Put it somewhere
-    pointLight.position.x = 10;
-    pointLight.position.y = 50;
-    pointLight.position.z = 130;
-
-	// Add the light to the scene
-    scene.add(pointLight);
-
-	// Draw!
-    var clock = new THREE.Clock;
-	var time;
-    function render() {
-        renderer.render(scene, camera);
-
-		time = clock.getDelta();
+	  /************ Now let's draw something! **********************/
 
 		/**
-		 * 6. Rotate the model?
+		 * 5. Add the loaded model to the scene
 		 */
-		 model.rotation.y -= time;
-		 model.rotation.x -= time;
+		scene.add(model);
 
-        requestAnimationFrame(render);
-    }
 
-    render();
+		// And the camera
+	  scene.add(camera);
 
+		// Create a point light
+	  var pointLight = new THREE.PointLight(0xFFFFFF);
+
+		// Put it somewhere
+	  pointLight.position.x = 10;
+	  pointLight.position.y = 50;
+	  pointLight.position.z = 130;
+
+		// Add the light to the scene
+	  scene.add(pointLight);
+
+		// Draw!
+	  var clock = new THREE.Clock;
+		var time;
+	  function render() {
+	      renderer.render(scene, camera);
+
+				time = clock.getDelta();
+
+				/**
+				 * 6. Rotate the model?
+				*/
+				model.rotation.y -= time;
+				// model.rotation.x -= time;
+
+	  		requestAnimationFrame(render);
+	  }
+	  render();
 	}
-
 	</script>
 </html>
