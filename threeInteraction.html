@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Getting Started with Three.js</title>
+		<style>
+			#container {
+				background: #000;
+                /* Specify the canvas size*/
+                height: 600px;
+                width: 800px;
+			}
+		</style>
+	</head>
+
+	<body>
+	<div id="container"></div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+
+	<!--Importants all of the awesomeness of Three.js-->
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r72/three.min.js"></script>-->
+	<script type="text/javascript" src="threejs/build/three.min.js"></script>
+
+	<!-- 1. Import OrbitControls script -->
+  <script type="text/javascript" src="threejs/examples/js/controls/OrbitControls.js"></script>
+
+	<!-- 3. Add back our jquery.hotkeys and key_status scripts -->
+	<script type="text/javascript" src="jquery.hotkeys.js"></script>
+  <script type="text/javascript" src="key_status.js"></script>
+  <script type="text/javascript">
+
+	/**
+	 * 4. Add our key event listeners
+	 */
+	document.addEventListener("keydown", keydownEvent, false);
+	document.addEventListener("keyup", keyupEvent, false);
+
+		function keydownEvent(e) {
+			if (!e) {
+				e = event;
+			}
+		}
+
+		function keyupEvent(e) {
+			if (!e) {
+				e = event;
+			}
+		}
+
+	init();
+	function init() {
+
+	/************** Set up the scene **********************/
+	// Set the size of the container where we're going to be drawing things
+	var WIDTH = 800;
+    var HEIGHT = 600;
+
+    // Instatiate the scene
+    var scene = new THREE.Scene();
+
+	// Get a place on the webpage to put the scene
+    var $container = $('#container');
+
+	// Set some camera attributes
+    var CAMERA_ANGLE = 45;
+    var ASPECT_RATIO = WIDTH / HEIGHT;
+    var NEAR_PLANE = 0.1;
+    var FAR_PLANE = 10000;
+
+	// Set-up a Camera
+    var camera = new THREE.PerspectiveCamera(CAMERA_ANGLE,
+        ASPECT_RATIO,
+        NEAR_PLANE, FAR_PLANE
+        );
+
+	// Put the camera somewhere useful
+    camera.position.z = 300;
+
+    // Create a WebGL Renderer
+    var renderer = new THREE.WebGLRenderer();
+
+	// Tell the renderer how many pixels it has to work with
+    renderer.setSize(WIDTH, HEIGHT);
+
+	// Link the renderer to the webpage
+    $container.append(renderer.domElement);
+
+    /************ Now let's draw something! **********************/
+	// (3) Create a material for our object
+    var sphereMaterial = new THREE.MeshPhongMaterial({
+    color: 0xCC0000
+    });
+
+	// Define how finely we want to divide a sphere mesh
+    var radius = 50, widthSegs = 40, heightSegs = 40;
+
+    var sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(radius, widthSegs, heightSegs),
+        sphereMaterial);
+
+    var cube = new THREE.Mesh(
+      new THREE.CubeGeometry(25,25,25),
+      new THREE.MeshPhongMaterial({color: 0x0000cc})
+    );
+
+	// Add the cube to the scene
+    cube.position.x -= 100;
+    scene.add(cube);
+    scene.add(sphere);
+
+	// And the camera
+    scene.add(camera);
+
+	// Create a point light
+    var pointLight = new THREE.PointLight(0xFFFFFF);
+
+	// Put it somewhere
+    pointLight.position.x = 10;
+    pointLight.position.y = 50;
+    pointLight.position.z = 130;
+
+	// Add the light to the scene
+    scene.add(pointLight);
+  var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+  scene.add( light );
+
+	/**
+	 * 2. Add Three.OrbitControls
+	 */
+  controls = new THREE.OrbitControls(camera, render.domElement);
+
+
+	/**
+	 * 6. Change sphere color when clicked on
+	 */
+  var mouse = new THREE.Vector2();
+  var raycaster = new THREE.Raycaster();
+
+  container.addEventListener('click', function(e){
+    mouse.x = (e.clientX / WIDTH) * 2 - 1;
+    mouse.y = -(e.clientY / HEIGHT) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    var intersects = raycaster.intersectObjects(scene.children);
+    if (intersects.length > 0){
+      var target = intersects[0].object;
+      if (target == sphere){
+        var color = sphere.material.color.getHex() == 0xCC0000 ? 0x00FF00 : 0xCC0000;
+        sphere.material.color.set(color);
+      }
+    }
+  });
+
+	// Draw!
+  var clock = new THREE.Clock;
+	var time;
+
+	requestAnimationFrame(render);
+
+  function render() {
+		  time = clock.getDelta();
+
+		  processInput()
+		  //update();
+
+		  //draw:
+      renderer.render(scene, camera);
+
+      requestAnimationFrame(render);
+    }
+
+  	function processInput() {
+  		/**
+  		 * 5. Do something when keys are pressed
+  		 */
+      if (keydown.w){
+        --camera.position.z;
+      }
+      if (keydown.s){
+        ++camera.position.z;
+      }
+  	}
+
+	}
+
+	</script>
+</html>
