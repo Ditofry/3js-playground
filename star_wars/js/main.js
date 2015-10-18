@@ -52,9 +52,9 @@ function init() {
 
   for ( i = 0; i < 20000; i ++ ) {
     var vertex = new THREE.Vector3();
-    vertex.x = Math.random() * 2000 - 1000;
-    vertex.y = Math.random() * 2000 - 1000;
-    vertex.z = Math.random() * 2000 - 1000;
+    vertex.x = Math.random() * 5000 - 1000;
+    vertex.y = Math.random() * 5000 - 1000;
+    vertex.z = Math.random() * 5000 - 1000;
 
     geometry.vertices.push( vertex );
   }
@@ -197,6 +197,6 @@ function processInput() {
     model.rotation.x -= .01;
   }
   if (keydown.space){
-    model.translateZ(-1);
+    model.translateZ(-10);
   }
 }
