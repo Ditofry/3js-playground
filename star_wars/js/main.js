@@ -32,8 +32,18 @@ function init() {
   container = document.createElement( 'div' );
   document.body.appendChild( container );
 
-  camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 3000 );
-  camera.position.z = 100;
+  // camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 3000 );
+  camera = new THREE.TargetCamera( 75, window.innerWidth / window.innerHeight, 1, 3000 );
+  camera.addTarget({
+    name: 'gTarget',
+    targetObject: model,
+    cameraPosition: new THREE.Vector3(0, 5, 20),
+    fixed: false,
+    stiffness: 1,
+    matchRotation: true
+  });
+
+  camera.setTarget( 'gTarget' );
 
   scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2( 0x000000, 0.0007 );
@@ -153,15 +163,7 @@ function render() {
   processInput();
   var time = Date.now() * 0.00005;
 
-  // Camera stays behind x-wing
-  camera.position.x = model.position.x;
-  camera.position.y = model.position.y;
-  camera.position.z = model.position.z + 20;
-  // Camera "lense" points towards x-wing;
-  // camera.lookAt( model.position );
-
-  var vector = new THREE.Vector3( 0, 0, -1 );
-  console.log(vector.applyQuaternion( camera.quaternion ));
+  camera.update();
 
   for ( i = 0; i < scene.children.length; i ++ ) {
     var object = scene.children[ i ];
@@ -183,15 +185,20 @@ function render() {
 
 function processInput() {
   if (keydown.w){
-    model.position.z -= 20;
+    // model.translateZ(-1);
+    model.rotation.x += .01;
   }
   if (keydown.a){
-    model.rotation.y -= .01;
-  }
-  if(keydown.d){
     model.rotation.y += .01;
   }
+  if(keydown.d){
+    model.rotation.y -= .01;
+  }
   if (keydown.s){
-    model.position.z += 20;
+    // model.translateZ(1);
+    model.rotation.x -= .01;
+  }
+  if (keydown.space){
+    model.translateZ(-1);
   }
 }
