@@ -54,74 +54,74 @@
 	/************** Set up the scene **********************/
 	// Set the size of the container where we're going to be drawing things
 	var WIDTH = 800;
-    var HEIGHT = 600;
+  var HEIGHT = 600;
 
-    // Instatiate the scene
-    var scene = new THREE.Scene();
+  // Instatiate the scene
+  var scene = new THREE.Scene();
 
 	// Get a place on the webpage to put the scene
-    var $container = $('#container');
+  var $container = $('#container');
 
 	// Set some camera attributes
-    var CAMERA_ANGLE = 45;
-    var ASPECT_RATIO = WIDTH / HEIGHT;
-    var NEAR_PLANE = 0.1;
-    var FAR_PLANE = 10000;
+  var CAMERA_ANGLE = 45;
+  var ASPECT_RATIO = WIDTH / HEIGHT;
+  var NEAR_PLANE = 0.1;
+  var FAR_PLANE = 10000;
 
 	// Set-up a Camera
-    var camera = new THREE.PerspectiveCamera(CAMERA_ANGLE,
-        ASPECT_RATIO,
-        NEAR_PLANE, FAR_PLANE
-        );
+  var camera = new THREE.PerspectiveCamera(CAMERA_ANGLE,
+    ASPECT_RATIO,
+    NEAR_PLANE, FAR_PLANE
+  );
 
 	// Put the camera somewhere useful
-    camera.position.z = 300;
+  camera.position.z = 300;
 
-    // Create a WebGL Renderer
-    var renderer = new THREE.WebGLRenderer();
+  // Create a WebGL Renderer
+  var renderer = new THREE.WebGLRenderer();
 
 	// Tell the renderer how many pixels it has to work with
-    renderer.setSize(WIDTH, HEIGHT);
+  renderer.setSize(WIDTH, HEIGHT);
 
 	// Link the renderer to the webpage
-    $container.append(renderer.domElement);
+  $container.append(renderer.domElement);
 
     /************ Now let's draw something! **********************/
 	// (3) Create a material for our object
-    var sphereMaterial = new THREE.MeshPhongMaterial({
-    color: 0xCC0000
-    });
+  var sphereMaterial = new THREE.MeshPhongMaterial({
+  	color: 0xCC0000
+  });
 
 	// Define how finely we want to divide a sphere mesh
-    var radius = 50, widthSegs = 40, heightSegs = 40;
+  var radius = 50, widthSegs = 40, heightSegs = 40;
 
-    var sphere = new THREE.Mesh(
-        new THREE.SphereGeometry(radius, widthSegs, heightSegs),
-        sphereMaterial);
+  var sphere = new THREE.Mesh(
+      new THREE.SphereGeometry(radius, widthSegs, heightSegs),
+      sphereMaterial);
 
-    var cube = new THREE.Mesh(
-      new THREE.CubeGeometry(25,25,25),
-      new THREE.MeshPhongMaterial({color: 0x0000cc})
-    );
+  var cube = new THREE.Mesh(
+    new THREE.CubeGeometry(25,25,25),
+    new THREE.MeshPhongMaterial({color: 0x0000cc})
+  );
 
 	// Add the cube to the scene
-    cube.position.x -= 100;
-    scene.add(cube);
-    scene.add(sphere);
+  cube.position.x -= 100;
+  scene.add(cube);
+  scene.add(sphere);
 
 	// And the camera
-    scene.add(camera);
+  scene.add(camera);
 
 	// Create a point light
-    var pointLight = new THREE.PointLight(0xFFFFFF);
+  var pointLight = new THREE.PointLight(0xFFFFFF);
 
 	// Put it somewhere
-    pointLight.position.x = 10;
-    pointLight.position.y = 50;
-    pointLight.position.z = 130;
+  pointLight.position.x = 10;
+  pointLight.position.y = 50;
+  pointLight.position.z = 130;
 
 	// Add the light to the scene
-    scene.add(pointLight);
+  scene.add(pointLight);
   var light = new THREE.AmbientLight( 0x404040 ); // soft white light
   scene.add( light );
 

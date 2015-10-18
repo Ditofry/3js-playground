@@ -1,14 +1,32 @@
+document.addEventListener("keydown", keydownEvent, false);
+document.addEventListener("keyup", keyupEvent, false);
+
+function keydownEvent(e) {
+  if (!e) {
+    e = event;
+  }
+}
+
+function keyupEvent(e) {
+  if (!e) {
+    e = event;
+  }
+}
+
 var container, stats;
-var camera, scene, renderer, particles, geometry, materials = [], parameters, i, h, color, size, model;
+var camera, scene, renderer, particles, geometry, materials = [], parameters, i, h, color, size, model, spaceBlanket;
 var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 var loader = new THREE.ColladaLoader();
-loader.load('assets/x-wing.dae', function(result) {
-  model = result.scene;
-  init();
-  animate();
-});
+// loader.load('assets/spaceBlanket.dae', function(result) {
+//   spaceBlanket = result.scene;
+  loader.load('assets/grandma.dae', function(r){
+    model = r.scene;
+    init();
+    animate();
+  });
+// });
 
 function init() {
   container = document.createElement( 'div' );
@@ -58,8 +76,30 @@ function init() {
   model.position.y = 0;
   model.position.z = 0;
 
+  // scene.add(spaceBlanket);
+  // spaceBlanket.position.x = 0;
+  // spaceBlanket.position.y = 150;
+  // spaceBlanket.position.z = 500;
+
+  // Add our moon/planet.
+  // return to https://open.bekk.no/procedural-planet-in-webgl-and-three-js
+  // at some point
+  var radius = 1000, widthSegs = 40, heightSegs = 40;
+  var sphereMaterial = new THREE.MeshPhongMaterial({
+    color: 0xCC0000
+  });
+  var sphere = new THREE.Mesh(
+      new THREE.SphereGeometry(radius, widthSegs, heightSegs),
+      sphereMaterial);
+
+  sphere.position.x = 0;
+  sphere.position.y = 0;
+  sphere.position.z = -2000;
+
+  scene.add(sphere);
+
   // Eventually this should be point from a nearby star/planet or something
-  var light = new THREE.AmbientLight( 0x404040 );
+  var light = new THREE.AmbientLight( 0xFFFFFF );
   scene.add( light );
 
   renderer = new THREE.WebGLRenderer();
@@ -110,6 +150,7 @@ function animate() {
 }
 
 function render() {
+  processInput();
   var time = Date.now() * 0.00005;
 
   // Camera stays behind x-wing
@@ -117,7 +158,10 @@ function render() {
   camera.position.y = model.position.y;
   camera.position.z = model.position.z + 20;
   // Camera "lense" points towards x-wing;
-  camera.lookAt( model.position );
+  // camera.lookAt( model.position );
+
+  var vector = new THREE.Vector3( 0, 0, -1 );
+  console.log(vector.applyQuaternion( camera.quaternion ));
 
   for ( i = 0; i < scene.children.length; i ++ ) {
     var object = scene.children[ i ];
@@ -135,4 +179,19 @@ function render() {
   }
   renderer.render( scene, camera );
 
+}
+
+function processInput() {
+  if (keydown.w){
+    model.position.z -= 20;
+  }
+  if (keydown.a){
+    model.rotation.y -= .01;
+  }
+  if(keydown.d){
+    model.rotation.y += .01;
+  }
+  if (keydown.s){
+    model.position.z += 20;
+  }
 }
