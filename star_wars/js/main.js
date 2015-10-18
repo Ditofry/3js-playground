@@ -185,7 +185,6 @@ function render() {
 
 function processInput() {
   if (keydown.w){
-    // model.translateZ(-1);
     model.rotation.x += .01;
   }
   if (keydown.a){
@@ -195,7 +194,6 @@ function processInput() {
     model.rotation.y -= .01;
   }
   if (keydown.s){
-    // model.translateZ(1);
     model.rotation.x -= .01;
   }
   if (keydown.space){
